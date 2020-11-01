@@ -1,0 +1,184 @@
+- Clientes
+-- id (int)
+-- nome (varchar)
+-- CPF (varchar)
+-- user_type (varchar) (default = Cliente)
+-- telefone (varchar)
+-- email (varchar)
+-- endereco (varchar) (endereco;bairro;cidade;estado;numero;cep;)
+-- senha (varchar)
+-- data_nascimento (date)
+
+
+CREATE TABLE m4th_cl13nt35 (
+
+    id int AUTO_INCREMENT PRIMARY KEY,
+    nome varchar(250) NOT NULL,
+    email varchar(250) NOT NULL UNIQUE,
+    cpf varchar(11) NOT NULL UNIQUE,
+    data_nascimento date NOT NULL,
+    telefone varchar(16) NOT NULL,
+    cep varchar(20) NOT NULL,
+    endereco varchar(200) NOT NULL,
+    numero int NOT NULL,
+    estado varchar(2) NOT NULL,
+    bairro varchar(50),
+    cidade varchar(100) NOT NULL,
+    
+    senha varchar(100),
+    user_type varchar(20) DEFAULT "Cliente"
+    
+);
+
+--------------------------------------------------------------
+
+- Admins
+-- id (int)
+-- Username (varchar)
+-- email (varchar)
+-- user_type (varchar) (check de inserção Administrador OR Gerente)
+-- senha (varchar)
+
+--------------------------------------------------------------
+
+- Categorias
+-- id (int)
+-- nome (varchar)
+
+CREATE TABLE m4th_c4t3g0r145 (
+
+    id int AUTO_INCREMENT PRIMARY KEY,
+    descricao varchar(50) UNIQUE
+    
+);
+--------------------------------------------------------------
+
+- Sub-Categoria
+-- id (int)
+-- nome (varchar)
+-- id_categoria_pai (int) (id da categoria mae)
+
+CREATE TABLE m4th_5ubc4t3g0r145 (
+
+    id int AUTO_INCREMENT PRIMARY KEY,
+    descricao varchar(50),
+    id_categoria_pai int,
+    FOREIGN KEY (id_categoria_pai) REFERENCES m4th_c4t3g0r145 (id)
+    
+);
+--------------------------------------------------------------
+- Variações
+-- id (int)
+-- nome (varchar)
+-- tipos (varchar) (P;M;G;GG)
+
+CREATE TABLE m4th_v4r14c40(
+
+    id int AUTO_INCREMENT PRIMARY KEY,
+    nome varchar (50),
+    tipos varchar(200)
+
+);
+--------------------------------------------------------------
+
+- Cupons
+-- id int
+-- codigo_cupom (varchar)
+-- porcentagem_desconto (int)
+
+CREATE TABLE m4th_cup0n5 (
+
+    id int AUTO_INCREMENT PRIMARY KEY,
+    codigo_cupon varchar(30) NOT NULL UNIQUE,
+    porcentagem_disconto int NOT NULL
+
+);
+--------------------------------------------------------------
+- Produtos
+-- id (int)
+-- titulo (varchar)
+-- descricao (varchar)
+-- preco (double)
+-- promocional (double)
+-- estoque (int)
+-- cupom (boolean)
+-- SKU_EAN (int)
+-- marca (varchar)
+-- imagens (varchar) (file;file;file)
+-- entrega (varchar) (peso;comprimento;largura;altura;tipo_entrega(gratis OR pago=preco))
+-- id_variacao (int) (id da variação)
+-- id_categoria (int) (id da tabela categoria)
+-- id_sub-categoria (int) (id da tabela sub-categoria)
+
+CREATE TABLE m4th_pr0dut05 (
+
+    id int AUTO_INCREMENT PRIMARY KEY,
+    titulo varchar(100) UNIQUE NOT NULL,
+    descricao varchar(1000) NOT NULL,
+    preco numeric(10.2) NOT NULL,
+    preco_promo numeric(10.2),
+    estoque int NOT NULL,
+    cupom boolean,
+    sku_ean int UNIQUE,
+    marca varchar(50) NOT NULL,
+    imagens varchar(500) NOT NULL,
+    entrega varchar(500) NOT NULL,
+    id_variacao int,
+    id_categoria int,
+    id_sub_categoria int,
+    FOREIGN KEY (id_variacao) REFERENCES m4th_v4r14c40(id),
+    FOREIGN KEY (id_categoria) REFERENCES m4th_c4t3g0r145(id),
+    FOREIGN KEY (id_sub_categoria) REFERENCES m4th_5ubc4t3g0r145(id)
+    
+);
+--------------------------------------------------------------
+- Pedidos
+-- id (int)
+-- id_cliente (int)
+-- status (varchar)
+-- valor_total (double) (valor total da soma de todos os produtos e suas quantidades que vier do carrinho)
+
+CREATE TABLE m4th_p3d1d05 (
+
+    id int AUTO_INCREMENT PRIMARY KEY,
+    id_cliente int NOT NULL,
+    entrega_total numeric(10.2) NOT NULL,
+    status_pedido varchar(20),
+    valor_total numeric(10.2) NOT NULL,
+    FOREIGN KEY (id_cliente) REFERENCES m4th_cl13nt35 (id)
+    
+);
+--------------------------------------------------------------
+- Detalhes do pedido
+-- id (int)
+-- id_pedido (int)
+-- id_produto (int) 
+-- quantidade (int)
+-- entrega numeric(10.2)
+-- valor_total numeric(10.2)
+
+CREATE TABLE m4th_p3d1d05_d3t41l (
+
+    id int AUTO_INCREMENT PRIMARY KEY,
+    id_pedido int NOT NULL,
+    id_produto int NOT NULL,
+    quantidade int NOT NULL,
+    entrega numeric(10.2) NOT NULL,
+    valor_total numeric(10.2),
+    FOREIGN KEY (id_pedido) REFERENCES m4th_p3d1d05(id),
+    FOREIGN KEY (id_produto) REFERENCES m4th_pr0dut05(id)
+    
+);
+--------------------------------------------------------------
+- Carrinho de compra (n fazer por bd talvez)
+-- id (int)
+-- id_cliente (int)
+-- id_produtos (int)
+-- quantidade (int)
+-- valor_total (double)
+--------------------------------------------------------------
+- Lista de desejos
+-- id (int)
+-- id_cliente (int)
+-- id_produtos (int)
+-- valor_total (double)
