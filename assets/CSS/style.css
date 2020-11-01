@@ -1,0 +1,28 @@
+@charset "UTF-8";
+/*noinspection CssUnknownTarget*/
+@import url('https://fonts.googleapis.com/css?family=Titillium+Web');
+
+.campodehoneypot{
+    opacity: 0 !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    height: 0 !important;
+    width: 0 !important;
+    z-index: -1 !important;
+}
+
+#formlogin{
+    background-color: transparent;
+
+
+}
+
+#cabecalho{
+    /*margin-bottom: 20%;*/
+}
+
+.tituloLogin{
+    text-align: center;
+}
+
